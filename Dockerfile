@@ -1,47 +1,16 @@
-FROM ubuntu:bionic
+FROM steamcmd/steamcmd:ubuntu-22
+
 ENV DEBIAN_FRONTEND noninteractive
-ENV GAME_INSTALL_DIR /home/steam/Unturned
-ENV GAME_ID 1110390
-ENV SERVER_NAME server
-ENV STEAM_USERNAME anonymous
 
-EXPOSE 27015
-EXPOSE 27016
+RUN apt-get update \
+    && apt-get full-upgrade -y \
+    && apt-get install -y curl wget jq screen htop unzip lib32stdc++6 libc6 libgdiplus libgl1-mesa-glx libxcursor1 libxrandr2 libc6-dev \
+    && mkdir -p /srv/unturned/Unturned_Headless_Data/Plugins/x86_64 /srv/unturned/.steam/root /srv/unturned/.steam/steam \
+    && ln -s /usr/lib/x86_64-linux-gnu/libdl.so.2 /usr/lib/x86_64-linux-gnu/libdl.so
 
-# Add Steam user
-RUN adduser \
-	--home /home/steam \
-	--disabled-password \
-	--shell /bin/bash \
-	--gecos "user for running steam" \
-	--quiet \
-	steam
+WORKDIR /srv/unturned
 
-# Create working directory
-RUN mkdir -p /home/steam/Unturned && \
-	cd /home/steam/Unturned && \
-	chown -R steam /home/steam/Unturned
+ENV DEBIAN_FRONTEND ""
 
-VOLUME ["/home/steam/Unturned"]
-
-RUN mkdir -p /opt/steamcmd && \
-    cd /opt/steamcmd && \
-    chown -R steam /opt/steamcmd
-
-WORKDIR /opt/steamcmd
-
-COPY . .
-
-# Set perms
-RUN chmod +x init.sh && \
-    chmod +x start_gameserver.sh
-
-# Install required packages
-RUN apt-get update && \
-    apt-get install -y unzip tar curl coreutils lib32gcc1 libgdiplus && \
-    apt-get clean -y && \
-    rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
-USER steam
-WORKDIR /opt/steamcmd
-ENTRYPOINT ["./init.sh"]
+COPY ./entrypoint.sh entrypoint.sh
+ENTRYPOINT ["/bin/bash", "entrypoint.sh"]
