@@ -29,7 +29,15 @@ if [ ! -d "$MODULES_DIR/Rocket.Unturned" ]; then
         rm README.md
         rm LICENSE
         rm Rocket.zip
-    fi    
+    elif ["$SERVER_TYPE" == 'open']; then
+        curl https://github.com/openmod/openmod/releases/download/3.4.2/OpenMod.Unturned.Module.zip -o Openmod.zip
+        unzip Openmod.zip
+        mv Modules/* ./
+        rmdir Modules
+        rm -rf ./Scripts
+        rm README
+        rm Rocket.zip
+    fi
 fi
 
 # Start game

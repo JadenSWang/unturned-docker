@@ -1,5 +1,5 @@
 FROM ubuntu:bionic
-LABEL maintainer="Enes Sadık Özbek <es.ozbek.me>"
+LABEL maintainer="Enes Sadık Özbek <es.ozbek.me>"z
 ENV DEBIAN_FRONTEND noninteractive
 ENV GAME_INSTALL_DIR /home/steam/Unturned
 ENV GAME_ID 1110390
