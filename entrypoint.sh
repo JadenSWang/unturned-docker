@@ -11,4 +11,4 @@ cp -r Extras/Rocket.Unturned Modules/
 
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/srv/unturned/linux64/
 
-./ServerHelper.sh +InternetServer/a
+./Unturned_Headless.x86_64 -batchmode -nographics +InternetServer/a
